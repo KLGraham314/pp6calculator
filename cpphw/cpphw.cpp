@@ -1,16 +1,13 @@
 #include <iostream>
 #include <climits>
 #include <cmath>
-#include "cppMath.hpp"
-#include "cppMath.hpp"
+#include "PP6LIB/cppMath.hpp"
+#include "PP6LIB/cppMath.hpp"
 
-
-int main()
-{	
-	double a=0, b=0, c=0, cminus=0, d=0, e=0, inside=0, E1=0, E2=0, px1=0, px2=0, py1=0, py2=0, pz1=0, pz2=0; //Declare number variables
-	char op; //Declare char variable for users to decide on calculator function
-	std::cout << "Welcome to the PP6 calculator!" << std::endl;
-
+void menu(int top){
+     double a=0, b=0, c=0, cminus=0, d=0, e=0, inside=0, E1=0, E2=0, px1=0, px2=0, py1=0, py2=0, pz1=0, pz2=0; //Declare number variables
+     char op; //Declare char variable for users to decide on calculator function
+     if(top==1){
 	while(true){ //While true, the calculator will keep performing functions until user quits
 		std::cout << "What kind of operation do you want to perform? (type 'm' for multiplication, 'd' for division, 'a' for addition or 's' for subtraction, 'x' to calculate the x-intercept of a line, 'e' to solve a quadratic equation, 't' to calculate the length of a 3-vector, 'f' to calculate the length of a 4-vector, 'p' to calculate the invariant mass of two particles, or 'q' for quit, followed by the enter key)" << std::endl; //Ask the user to choose operation
 		std::cin >> op; //Take in user selection
@@ -112,6 +109,32 @@ int main()
 		}
 		std::cout << std::endl;
 	}
+}
+}
+
+
+int main()
+{
+    while(true){
+	int top = 0; // Variable for users to decide on which menu for day of the course
+	std::cout << "Welcome to the PP6 calculator!" << std::endl;
+	std::cout << "Please choose which functions you would like to choose from based on the day of the course they were implemented." << std::endl;
+	std::cout << "Enter '1' for Day 1 and '2' for Day 2, or '0' to quit PP6 calculator." << std::endl;
+	std::cin >> top; //Take user choice of menu
+	if(!std::cin){ //If input failed, move onto the next iteration
+		std::cout << "Input failed" << std::endl;
+		std::cin.clear();
+		std::cin.ignore(INT_MAX, '\n');
+		continue;
+	} else if(top==0) {
+		break;
+	} else if(top!=1 && top!=2){ //If input not valid, print message and move onto next iteration
+		std::cout << "Please enter '0', '1' or '2' only." << std::endl;
+	} else {
+		 menu(top); //Takes user to menu of choice;
+	}
+    }
+	
 	return 0;
 }
 
