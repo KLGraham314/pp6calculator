@@ -8,9 +8,10 @@
 
 int main()
 {
+    std::cout << "Welcome to the PP6 calculator!" << std::endl;
+
     while(true){
 	int top = 0; // Variable for users to decide on which menu for day of the course
-	std::cout << "Welcome to the PP6 calculator!" << std::endl;
 	std::cout << "Please choose which functions you would like to choose from based on the day of the course they were implemented." << std::endl;
 	std::cout << "Enter '1' for Day 1 and '2' for Day 2, or '0' to quit PP6 calculator." << std::endl;
 	std::cin >> top; //Take user choice of menu

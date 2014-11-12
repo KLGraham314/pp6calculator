@@ -19,7 +19,7 @@ include_directories(cpphw/PP6LIB)
 add_subdirectory(cpphw/PP6LIB)
 
 # - Add the pp6calculator program
-add_executable(pp6calculator cpphw/cpphw.cpp cpphw/PP6LIB/cppMath.cpp cpphw/PP6LIB/cppMath.hpp cpphw/PP6LIB/cppMenu.cpp cpphw/PP6LIB/cppMenu.hpp)
+add_executable(pp6calculator cpphw/cpphw.cpp cpphw/PP6LIB/cppMath.cpp cpphw/PP6LIB/cppMath.hpp cpphw/PP6LIB/cppMenu.cpp cpphw/PP6LIB/cppMenu.hpp cpphw/PP6LIB/cppPhysics.cpp cpphw/PP6LIB/cppPhysics.hpp)
 
 # - Link pp6calculator to the pp6lib library
 target_link_libraries(pp6calculator pp6lib)
