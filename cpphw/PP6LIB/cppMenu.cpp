@@ -3,6 +3,7 @@
 #include <climits>
 #include "cppMenu.hpp"
 #include "cppMath.hpp"
+#include <cstdlib>
 
 void menu(int top){ //Function for menu for Day 1 operations
      double a=0, b=0, c=0, cminus=0, d=0, e=0, inside=0, E1=0, E2=0, px1=0, px2=0, py1=0, py2=0, pz1=0, pz2=0; //Declare number variables
@@ -11,6 +12,13 @@ void menu(int top){ //Function for menu for Day 1 operations
 	while(true){ //While true, the calculator will keep performing functions until user quits
 		std::cout << "What kind of operation do you want to perform? (type 'm' for multiplication, 'd' for division, 'a' for addition or 's' for subtraction, 'x' to calculate the x-intercept of a line, 'e' to solve a quadratic equation, 't' to calculate the length of a 3-vector, 'f' to calculate the length of a 4-vector, 'p' to calculate the invariant mass of two particles, or 'q' to quit and go back to the top level menu, followed by the enter key)" << std::endl; //Ask the user to choose operation
 		std::cin >> op; //Take in user selection
+
+		if(!std::cin){ //If input failed, move onto the next iteration
+			std::cout << "Input failed" << std::endl;
+			std::cin.clear();
+			std::cin.ignore(INT_MAX, '\n');
+			continue;
+		}
 
 		if(op=='q'){ break;} //User quits - go back to top level menu
 		else if(op=='a'||op=='s'||op=='m'||op=='d'){ //For arithmetic, print this message and take inputs
@@ -110,5 +118,47 @@ void menu(int top){ //Function for menu for Day 1 operations
 		std::cout << std::endl;
 	}
      }
+     if(top==2){
+	while(true){
+		std::cout << "What kind of operation do you want to perform? Enter 'r' to generate 100 random energies and 3-momenta and report the mean energy and standard deviation, or 'q' to quit and go back to the top level menu." << std::endl;
+		std::cin >> op;
+
+		if(!std::cin){ //If input failed, move onto the next iteration
+			std::cout << "Input failed" << std::endl;
+			std::cin.clear();
+			std::cin.ignore(INT_MAX, '\n');
+			continue;
+		}
+
+		if(op=='r'){
+			std::cout <<"Generating 100 random energies and 3-momenta." <<std::endl;
+			double momenta[100]; //Array to hold 3-momenta
+			double energies[100]; //Array to hold energies
+			double sumenergy = 0; //Variable to hold sum of energies;
+			for(int i=0; i<100; i++){
+				double p = rand()%100; //Random number for 3-momentum
+				momenta[i] = p;
+				double m = rand()%100; //Random number for mass
+				energies[i] = sqrt((p*p)+(m*m)); //Calculate energy from random p and m
+				sumenergy += energies[i]; //Add energy to total
+			}
+			double mean = sumenergy*0.01; // = sum/100
+			std::cout <<"Mean energy is " << mean << " GeV." << std::endl;
+			double diff=0; // energy - mean energy summed
+			for(int i=0;i<100;i++){
+				diff+= ((energies[i] - mean)*(energies[i] - mean)); //Add to total
+			}
+			double dev = sqrt((diff/99)); //Calculate standard deviation
+			std::cout<< "Standard deviation is " << dev << " Gev." <<std::endl;
+
+		} else if(op=='q'){
+			break;
+		} else{
+			std::cout << "Input must be 'r' or 'q' only" << std::endl;
+			continue;
+		}
+
+	}
+    }	
 }
 
