@@ -5,6 +5,7 @@
 #include "cppMath.hpp"
 #include <cstdlib>
 #include "cppPhysics.hpp"
+#include "FileReader.hpp"
 
 void menu(int top){ //Function for menu for Day 1 operations
 
@@ -127,7 +128,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 
 	while(true){ //Loop until user quits
 
-		std::cout << "What kind of operation do you want to perform? Enter 'r' to generate 100 random energies and 3-momenta and report the mean energy and standard deviation, or 'q' to quit and go back to the top level menu." << std::endl;
+		std::cout << "What kind of operation do you want to perform? Enter 'r' to generate 100 random energies and 3-momenta and report the mean energy and standard deviation, 'm' to read in a file you have supplied to calculate the invariant mass of all mu+ mu- pairs and report the 10 largest invariant masses and which events formed these, or 'q' to quit and go back to the top level menu." << std::endl;
 		std::cin >> op; //Take user input
 
 		if(!std::cin){ //If input failed, move onto the next iteration
@@ -137,17 +138,50 @@ void menu(int top){ //Function for menu for Day 1 operations
 			continue;
 		}
 
-		if(op=='r'){
+		if(op=='r'){ //Generate 100 random energies and 3-momenta and give the mean energy and standard deviation
 			double mean = 0;
 			double dev = 0;
 			std::cout <<"Generating 100 random energies and 3-momenta." <<std::endl;
 			fenergy(mean, dev); //Calculate mean and standard deviation of those 100 energies
 			std::cout <<"Mean energy is " << mean << " GeV." << std::endl;
 			std::cout<< "Standard deviation is " << dev << " GeV." <<std::endl;
-
-		} else if(op=='q'){
+		} else if(op=='m'){ //Read in user-supplied file, calculate the invariant mass of all mu+ mu- pairs and report the 10 largest invariant masses and which events formed these
+			const double mass = 0.106; //Muon mass in GeV
+			FileReader f("observedparticles.dat"); //Open the file to be read
+			// Only process if the file is open/valid
+			if (f.isValid()) {
+			      // Loop until out of lines
+			      int i = 0; //Line counter for first while loop
+			      while (f.nextLine()) {
+					std::string namef = f.getFieldAsString(2);
+					double pxf = f.getFieldAsDouble(3);
+					double pyf = f.getFieldAsDouble(4);
+					double pzf = f.getFieldAsDouble(5);
+					double Ef = sqrt((mass*mass)+(pxf*pxf)+(pyf*pyf)+(pzf*pzf));
+					if(namef=="mu+"){
+						FileReader g("observedparticles.dat");
+						std::cout << f.getFieldAsInt(1) << std::endl;
+						while (g.nextLine()){
+							std::string nameg = g.getFieldAsString(2);
+							if(nameg=="mu-"){
+								double pxg = g.getFieldAsDouble(3);
+								double pyg = g.getFieldAsDouble(4);
+								double pzg = g.getFieldAsDouble(5);
+								double Eg = sqrt((mass*mass)+(pxg*pxg)+(pyg*pyg)+(pzg*pzg));
+								double invmass = sqrt((Ef+Eg)*(Ef+Eg)-(pxf+pxg)*(pxf+pxg)-(pyf+pyg)*(pyf+pyg)-(pzf+pzg)*(pzf+pzg));
+								std::cout << invmass << std::endl;
+	
+							}
+						}
+					}
+			      }
+			} else { // File is not open/valid
+			      std::cout << "Failed to open file. Check file is named 'observedparticles.dat', is in the same directory as this, and is of a valid format" << std::endl;
+			      continue; 
+			}
+		} else if(op=='q'){ //Quit and go back to top level menu
 			break;
-		} else{
+		} else{ // Invalid input
 			std::cout << "Input must be 'r' or 'q' only" << std::endl;
 			continue;
 		}
