@@ -7,6 +7,37 @@
 #include "cppPhysics.hpp"
 #include "FileReader.hpp"
 
+
+void swap(double& a, double& b){ //Swap doubles a and b
+	double temp = a;
+	a = b;
+	b = temp;
+}
+
+void swapstring(std::string& a, std::string& b){ //Swap strings a and b
+	std::string temp = a;
+	a = b;
+	b = temp;
+}
+
+void bubblesort(double array[10000], std::string farray[10000], std::string garray[10000]){
+	int conditional = 1; //Assume disordered to start	
+	while(conditional!=0){
+	      for(int i=0; i<10000; i++){
+		  if(array[i]<array[i+1]){
+			 swap(array[i],array[i+1]);
+			 swapstring(farray[i],farray[i+1]);
+			 swapstring(garray[i],garray[i+1]);
+		  }
+	      }
+		 conditional = 0; // If ordered, = 0;
+		for(int i=0; i<10000; i++){
+			if(array[i]<array[i+1]) conditional++; //Increment conditional if disordered
+		}
+	}
+}
+
+
 void menu(int top){ //Function for menu for Day 1 operations
 
      double a=0, b=0, c=0, cminus=0, d=0, e=0, inside=0, E1=0, E2=0, px1=0, px2=0, py1=0, py2=0, pz1=0, pz2=0; //Declare number variables
@@ -151,7 +182,11 @@ void menu(int top){ //Function for menu for Day 1 operations
 			// Only process if the file is open/valid
 			if (f.isValid()) {
 			      // Loop until out of lines
-			      int i = 0; //Line counter for first while loop
+			      int k = 0; //Array index
+			      double invm[10000]; //Array to hold invariant masses
+			      for(int i=0; i<10000; i++) invm[i]=0; //initialise
+			      std::string findex[10000]; //Array to hold mu- events
+			      std::string gindex[10000]; //Array to hold mu+ events
 			      while (f.nextLine()) {
 					std::string namef = f.getFieldAsString(2);
 					double pxf = f.getFieldAsDouble(3);
@@ -160,7 +195,6 @@ void menu(int top){ //Function for menu for Day 1 operations
 					double Ef = sqrt((mass*mass)+(pxf*pxf)+(pyf*pyf)+(pzf*pzf));
 					if(namef=="mu+"){
 						FileReader g("observedparticles.dat");
-						std::cout << f.getFieldAsInt(1) << std::endl;
 						while (g.nextLine()){
 							std::string nameg = g.getFieldAsString(2);
 							if(nameg=="mu-"){
@@ -169,12 +203,19 @@ void menu(int top){ //Function for menu for Day 1 operations
 								double pzg = g.getFieldAsDouble(5);
 								double Eg = sqrt((mass*mass)+(pxg*pxg)+(pyg*pyg)+(pzg*pzg));
 								double invmass = sqrt((Ef+Eg)*(Ef+Eg)-(pxf+pxg)*(pxf+pxg)-(pyf+pyg)*(pyf+pyg)-(pzf+pzg)*(pzf+pzg));
-								std::cout << invmass << std::endl;
-	
+								k++; //Move to nexy array index
+								invm[k]= invmass; //Add the inv mass to the array
+								findex[k]= namef; //Line of the mu+
+								gindex[k]= nameg; //Line of the mu-
+
 							}
 						}
 					}
 			      }
+			     bubblesort(invm, findex, gindex);
+			     for(int i=0; i<10; i++){
+					std::cout << invm[i] << std::endl;
+			     }
 			} else { // File is not open/valid
 			      std::cout << "Failed to open file. Check file is named 'observedparticles.dat', is in the same directory as this, and is of a valid format" << std::endl;
 			      continue; 
