@@ -5,5 +5,8 @@
 //function declarations
 void fenergy(double& mean, double& dev);
 
+void boost_z(double& x, double& y, double& z, double&t, double v);
+
+double spacetimeint(double x, double y, double z, double t);
 
 #endif // PP6CALCULATOR_CPPPHYSICS_HH

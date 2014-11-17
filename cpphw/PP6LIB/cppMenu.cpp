@@ -38,6 +38,7 @@ void bubblesort(double array[10000], std::string farray[10000], std::string garr
 }
 
 
+
 void menu(int top){ //Function for menu for Day 1 operations
 
      double a=0, b=0, c=0, cminus=0, d=0, e=0, inside=0, E1=0, E2=0, px1=0, px2=0, py1=0, py2=0, pz1=0, pz2=0; //Declare number variables
@@ -235,9 +236,16 @@ void menu(int top){ //Function for menu for Day 1 operations
 		std::cout << "What kind of operation do you want to perform? Enter 'b' to boost a 4-vector along the x-axis, 'l' to calulate the length of a 4-vector or 'q' to quit to top level menu." << std::endl;
 		std::cin >> op; //Take in user input for operation
 
+		if(!std::cin){ //If input failed, move onto the next iteration
+			std::cout << "Input failed" << std::endl;
+			std::cin.clear();
+			std::cin.ignore(INT_MAX, '\n');
+			continue;
+		}
+
 		if(op=='b'){
-			double t, x, y, z; //4-vector component variables
-			std::cout << "Enter the components of the 4-vector." << std::endl;
+			double t, x, y, z, v=2; //4-vector component variables
+			std::cout << "Enter the components of the 4-vector and the boost velocity (in nat units)." << std::endl;
 			std::cout << "t: ";
 			std::cin >> t;
 			std::cout << "x: ";
@@ -246,6 +254,17 @@ void menu(int top){ //Function for menu for Day 1 operations
 			std::cin >> y;
 			std::cout << "z: ";
 			std::cin >> z;
+			while(v<0||v>1){
+				std::cout << "v (must be between 0 and 1): ";
+				std::cin >> v;
+			}
+			boost_z(x,y,z,t,v); //Calculate boosted coordinates
+			std::cout << "x': " << x << std::endl;
+			std::cout << "y': " << y << std::endl;
+			std::cout << "z': " << z << std::endl;
+			std::cout << "t': " << t << std::endl;
+
+
 		} else if(op=='l'){ //Calculate length of 4-vector
 			double t, x, y, z; //4-vector component variables
 			std::cout << "Enter the components of the 4-vector." << std::endl;
@@ -257,6 +276,8 @@ void menu(int top){ //Function for menu for Day 1 operations
 			std::cin >> y;
 			std::cout << "z: ";
 			std::cin >> z;
+			double ds = spacetimeint(x,y,z,t); //Calculate spacetime interval;
+			std::cout << "ds = " << ds << std::endl;
 
 		} else if(op=='q'){//Go back to top level menu
 			break;

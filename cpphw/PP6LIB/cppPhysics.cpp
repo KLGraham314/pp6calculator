@@ -21,3 +21,17 @@ void fenergy(double& mean, double& dev){
 		}
 		dev = sqrt((diff/99)); //Calculate standard deviation
 }
+
+void boost_z(double& x, double& y, double& z, double&t, double v){ //Boost along z-axis
+	double gammainv = sqrt(1-(v*v));
+	double gamma = 1.0/gammainv; //Lorentz factor
+	x = x; //boosted x
+	y= y; //boosted y
+	z = gamma*(z - (v*t)); //boosted z
+	t = gamma*(t - (v*z)); //boosted t
+}
+
+double spacetimeint(double x, double y, double z, double t){ //Spacetime interval
+	return sqrt( abs(  (x*x) + (y*y) + (z*z) - (t*t) ) ); 
+}
+
