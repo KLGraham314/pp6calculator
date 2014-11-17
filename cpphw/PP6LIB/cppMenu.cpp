@@ -210,7 +210,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 
 							}
 						}
-					}
+					} 
 			      }
 			     bubblesort(invm, findex, gindex);
 			     for(int i=0; i<10; i++){
@@ -229,5 +229,44 @@ void menu(int top){ //Function for menu for Day 1 operations
 
 	} //End while loop
     }	//End Day 2
+
+    if(top==3){ //Day 3 operations
+	while(true){
+		std::cout << "What kind of operation do you want to perform? Enter 'b' to boost a 4-vector along the x-axis, 'l' to calulate the length of a 4-vector or 'q' to quit to top level menu." << std::endl;
+		std::cin >> op; //Take in user input for operation
+
+		if(op=='b'){
+			double t, x, y, z; //4-vector component variables
+			std::cout << "Enter the components of the 4-vector." << std::endl;
+			std::cout << "t: ";
+			std::cin >> t;
+			std::cout << "x: ";
+			std::cin >> x;
+			std::cout << "y: ";
+			std::cin >> y;
+			std::cout << "z: ";
+			std::cin >> z;
+		} else if(op=='l'){ //Calculate length of 4-vector
+			double t, x, y, z; //4-vector component variables
+			std::cout << "Enter the components of the 4-vector." << std::endl;
+			std::cout << "t: ";
+			std::cin >> t;
+			std::cout << "x: ";
+			std::cin >> x;
+			std::cout << "y: ";
+			std::cin >> y;
+			std::cout << "z: ";
+			std::cin >> z;
+
+		} else if(op=='q'){//Go back to top level menu
+			break;
+		} else{ //Invalid input
+			std::cout << "Input must be 'b','l' or 'q' only." << std::endl;
+			continue;
+		}
+	}
+
+    } //End Day 3
+
 } //End menu()
 
