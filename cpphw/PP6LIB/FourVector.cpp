@@ -1,5 +1,6 @@
 // FourVector.cpp
 #include "FourVector.hpp"
+#include <iostream>
 #include <cmath>
 
 //Assignment constructor
@@ -55,6 +56,60 @@ void FourVector::boost_z(const double v){ //Boost along z-axis
 double FourVector::spacetimeint() const { //Spacetime interval
 	return sqrt( std::abs( ((t)*(t)) - ((x)*(x)) - ((y)*(y)) - ((z)*(z)) ) );
 }
+
+
+//Member assignment operator functions
+FourVector& FourVector::operator+=(const FourVector& rhs){
+	t += rhs.t;
+	x += rhs.x;
+	y += rhs.y;
+	z += rhs.z;
+	return *this;
+}
+FourVector& FourVector::operator-=(const FourVector& rhs){
+	t -= rhs.t;
+	x -= rhs.x;
+	y -= rhs.y;
+	z -= rhs.z;
+	return *this;
+}
+FourVector& FourVector::operator=(const FourVector& rhs){
+	if(&rhs != this){
+		t = rhs.t;
+		x = rhs.x;
+		y = rhs.y;
+		z = rhs.z;
+	}
+	return *this;
+}
+
+//Free operator functions
+FourVector operator+(const FourVector& lhs, const FourVector& rhs){
+	FourVector temp(lhs);
+	temp += rhs;
+	return temp;
+}
+FourVector operator-(const FourVector& lhs, const FourVector& rhs){
+	FourVector temp(lhs);
+	temp -= rhs;
+	return temp;
+}
+std::ostream& operator<<(std::ostream& stream, const FourVector& f){
+	stream << "t: ";
+	stream << f.getT() << "\n x: " << f.getX() << "\n y: ";
+	stream << f.getY() << "\n z: " << f.getZ() << "\n";
+	return stream;
+}
+std::istream& operator>>(std::istream& stream, FourVector& f){
+	double t, x, y, z;
+	stream >> t >> x >> y >> z;
+	f.setT(t);
+	f.setX(x);
+	f.setY(y);
+	f.setZ(z);
+	return stream;
+}
+
 /*
 FourVectorCausalType getFourVectorCausalType(FourVector *f) {
 	if(!f) {

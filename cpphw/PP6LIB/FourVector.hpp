@@ -1,5 +1,6 @@
 #ifndef FOURVECTOR_HPP
 #define FOURVECTOR_HPP
+#include <iostream>
 
 // Forward declare struct
 class FourVector {
@@ -11,7 +12,7 @@ class FourVector {
 
 	//Member functions
 	void boost_z(const double v);
-	void setX(const double x_);
+	void setX(const double x);
 	void setY(const double y);
 	void setZ(const double z);
 	void setT(const double t);
@@ -20,6 +21,11 @@ class FourVector {
 	double getZ() const;
 	double getT() const;
 	double getInterval() const;
+
+	//Member assignment operator functions
+	FourVector& operator+=(const FourVector& rhs);
+	FourVector& operator-=(const FourVector& rhs);
+	FourVector& operator=(const FourVector& rhs);
 
 
  private:
@@ -35,6 +41,13 @@ class FourVector {
 
 
 };
+
+//Free functions for operators
+FourVector operator+(const FourVector& lhs, const FourVector& rhs);
+FourVector operator-(const FourVector& lhs, const FourVector& rhs);
+std::ostream& operator<<(std::ostream& stream, const FourVector& f);
+std::istream& operator>>(std::istream& stream, FourVector& f);
+
 /*
 	enum FourVectorCausalType {
 		SPACELIKE_TYPE,
