@@ -245,8 +245,6 @@ void menu(int top){ //Function for menu for Day 1 operations
 		}
 
 		if(op=='b'){
-			FourVector *f;
-			f = createFourVector();
 			double t, x, y, z, v=2; //4-vector component variables
 			std::cout << "Enter the components of the 4-vector and the boost velocity (in nat units)." << std::endl;
 			std::cout << "t: ";
@@ -261,20 +259,14 @@ void menu(int top){ //Function for menu for Day 1 operations
 				std::cout << "v (must be between 0 and 1): ";
 				std::cin >> v;
 			}
-			setFourVectorX(f,x);
-			setFourVectorY(f,y);
-			setFourVectorZ(f,z);
-			setFourVectorT(f,t);
-			boost_z(f,v); //Calculate boosted coordinates
-			std::cout << "t': " << getFourVectorT(f) << std::endl;
-			std::cout << "x': " << getFourVectorX(f) << std::endl;
-			std::cout << "y': " << getFourVectorY(f) << std::endl;
-			std::cout << "z': " << getFourVectorZ(f) << std::endl;
-			destroyFourVector(f);
+			FourVector *f = new FourVector(t,x,y,z);
+			f->boost_z(v); //Calculate boosted coordinates
+			std::cout << "t': " << f->getT() << std::endl;
+			std::cout << "x': " << f->getX() << std::endl;
+			std::cout << "y': " << f->getY() << std::endl;
+			std::cout << "z': " << f->getZ() << std::endl;
 
 		} else if(op=='l'){ //Calculate length of 4-vector
-			FourVector *f;
-			f = createFourVector();
 			double t, x, y, z; //4-vector component variables
 			std::cout << "Enter the components of the 4-vector." << std::endl;
 			std::cout << "t: ";
@@ -285,18 +277,14 @@ void menu(int top){ //Function for menu for Day 1 operations
 			std::cin >> y;
 			std::cout << "z: ";
 			std::cin >> z;
-			setFourVectorX(f,x);
-			setFourVectorY(f,y);
-			setFourVectorZ(f,z);
-			setFourVectorT(f,t);
-			double ds = spacetimeint(f); //Calculate spacetime interval;
+			FourVector *f = new FourVector(t,x,y,z);
+			double ds = f->getInterval(); //Calculate spacetime interval;
 			std::cout << "ds = " << ds << std::endl;
-			FourVectorCausalType typ = getFourVectorCausalType(f);
-			if(typ==UNDEFINED_TYPE) std::cout << "Didn't work" << std::endl;
-			if(typ==TIMELIKE_TYPE) std::cout << "Timelike" << std::endl;
-			if(typ==SPACELIKE_TYPE) std::cout << "Spacelike" << std::endl;
-			if(typ==NULL_TYPE) std::cout << "Null" << std::endl;
-			destroyFourVector(f);
+		//	FourVectorCausalType typ = getFourVectorCausalType(f);
+		//	if(typ==UNDEFINED_TYPE) std::cout << "Didn't work" << std::endl;
+		//	if(typ==TIMELIKE_TYPE) std::cout << "Timelike" << std::endl;
+		//	if(typ==SPACELIKE_TYPE) std::cout << "Spacelike" << std::endl;
+		//	if(typ==NULL_TYPE) std::cout << "Null" << std::endl;
 
 		} else if(op=='q'){//Go back to top level menu
 			break;
