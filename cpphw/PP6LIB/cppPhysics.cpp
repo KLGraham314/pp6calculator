@@ -22,4 +22,32 @@ void fenergy(double& mean, double& dev){
 		dev = sqrt((diff/99)); //Calculate standard deviation
 }
 
+void swap(double& a, double& b){ //Swap doubles a and b
+	double temp = a;
+	a = b;
+	b = temp;
+}
+
+void swapint(int& a, int& b){ //Swap ints a and b
+	int temp = a;
+	a = b;
+	b = temp;
+}
+
+void bubblesort(double array[10000], int farray[10000], int garray[10000]){
+	int conditional = 1; //Assume disordered to start	
+	while(conditional!=0){
+	      for(int i=0; i<10000; i++){
+		  if(array[i]<array[i+1]){
+			 swap(array[i],array[i+1]);
+			 swapint(farray[i],farray[i+1]);
+			 swapint(garray[i],garray[i+1]);
+		  }
+	      }
+		 conditional = 0; // If ordered, = 0;
+		for(int i=0; i<10000; i++){
+			if(array[i]<array[i+1]) conditional++; //Increment conditional if disordered
+		}
+	}
+}
 

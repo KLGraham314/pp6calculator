@@ -9,36 +9,6 @@
 #include "FourVector.hpp"
 
 
-void swap(double& a, double& b){ //Swap doubles a and b
-	double temp = a;
-	a = b;
-	b = temp;
-}
-
-void swapstring(std::string& a, std::string& b){ //Swap strings a and b
-	std::string temp = a;
-	a = b;
-	b = temp;
-}
-
-void bubblesort(double array[10000], std::string farray[10000], std::string garray[10000]){
-	int conditional = 1; //Assume disordered to start	
-	while(conditional!=0){
-	      for(int i=0; i<10000; i++){
-		  if(array[i]<array[i+1]){
-			 swap(array[i],array[i+1]);
-			 swapstring(farray[i],farray[i+1]);
-			 swapstring(garray[i],garray[i+1]);
-		  }
-	      }
-		 conditional = 0; // If ordered, = 0;
-		for(int i=0; i<10000; i++){
-			if(array[i]<array[i+1]) conditional++; //Increment conditional if disordered
-		}
-	}
-}
-
-
 
 void menu(int top){ //Function for menu for Day 1 operations
 
@@ -178,6 +148,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 			fenergy(mean, dev); //Calculate mean and standard deviation of those 100 energies
 			std::cout <<"Mean energy is " << mean << " GeV." << std::endl;
 			std::cout<< "Standard deviation is " << dev << " GeV." <<std::endl;
+
 		} else if(op=='m'){ //Read in user-supplied file, calculate the invariant mass of all mu+ mu- pairs and report the 10 largest invariant masses and which events formed these
 			const double mass = 0.106; //Muon mass in GeV
 			FileReader f("observedparticles.dat"); //Open the file to be read
@@ -185,12 +156,13 @@ void menu(int top){ //Function for menu for Day 1 operations
 			if (f.isValid()) {
 			      // Loop until out of lines
 			      int k = 0; //Array index
-			      double invm[10000]; //Array to hold invariant masses
+			      double *invm = new double[10000]; //Array to hold invariant masses
 			      for(int i=0; i<10000; i++) invm[i]=0; //initialise
-			      std::string findex[10000]; //Array to hold mu- events
-			      std::string gindex[10000]; //Array to hold mu+ events
+			      int *findex = new int[10000]; //Array to hold mu- events
+			      int *gindex = new int[10000]; //Array to hold mu+ events
 			      while (f.nextLine()) {
 					std::string namef = f.getFieldAsString(2);
+					int eventf = f.getFieldAsInt(1);
 					double pxf = f.getFieldAsDouble(3);
 					double pyf = f.getFieldAsDouble(4);
 					double pzf = f.getFieldAsDouble(5);
@@ -199,31 +171,39 @@ void menu(int top){ //Function for menu for Day 1 operations
 						FileReader g("observedparticles.dat");
 						while (g.nextLine()){
 							std::string nameg = g.getFieldAsString(2);
+							int eventg = g.getFieldAsInt(1);
 							if(nameg=="mu-"){
 								double pxg = g.getFieldAsDouble(3);
 								double pyg = g.getFieldAsDouble(4);
 								double pzg = g.getFieldAsDouble(5);
 								double Eg = sqrt((mass*mass)+(pxg*pxg)+(pyg*pyg)+(pzg*pzg));
 								double invmass = sqrt((Ef+Eg)*(Ef+Eg)-(pxf+pxg)*(pxf+pxg)-(pyf+pyg)*(pyf+pyg)-(pzf+pzg)*(pzf+pzg));
-								k++; //Move to nexy array index
 								invm[k]= invmass; //Add the inv mass to the array
-								findex[k]= namef; //Line of the mu+
-								gindex[k]= nameg; //Line of the mu-
+								findex[k]= eventf; //Line of the mu+
+								gindex[k]= eventg; //Line of the mu-
+								k++; //Move to nexy array index
+
 
 							}
 						}
 					} 
 			      }
-			     //bubblesort(invm, findex, gindex);
+			     bubblesort(invm, findex, gindex); //Sort by highest inv mass, and sort corresponding mu+, mu- indices into same order
+			     std::cout << "Inv mass \t mu+ event \t mu- event" << std::endl;
 			     for(int i=0; i<10; i++){
-					std::cout << invm[i] << std::endl;
+					std::cout << invm[i] << '\t' << '\t' << findex[i] << '\t'<< '\t' << gindex[i] << std::endl;
 			     }
+			     delete[] invm;
+			     delete[] findex;
+			     delete[] gindex;
 			} else { // File is not open/valid
 			      std::cout << "Failed to open file. Check file is named 'observedparticles.dat', is in the same directory as this, and is of a valid format" << std::endl;
 			      continue; 
 			}
+
 		} else if(op=='q'){ //Quit and go back to top level menu
 			break;
+
 		} else{ // Invalid input
 			std::cout << "Input must be 'r' or 'q' only" << std::endl;
 			continue;
