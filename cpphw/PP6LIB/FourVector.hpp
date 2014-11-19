@@ -1,14 +1,16 @@
 #ifndef FOURVECTOR_HPP
 #define FOURVECTOR_HPP
 #include <iostream>
+#include "ThreeVector.hpp"
 
-// Forward declare struct
+
 class FourVector {
  public:
 	//Constructors
-	FourVector(){ t=0; x = 0; y = 0; z = 0 ; interval = 0; }
+	FourVector(){ t_=0; x_ = 0; y_ = 0; z_ = 0 ; interval_ = 0; }
 	FourVector(const double t_, const double x_, const double y_, const double z_);
 	FourVector(const FourVector& other);
+	FourVector(const double t, const ThreeVector s);
 
 	//Member functions
 	void boost_z(const double v);
@@ -26,18 +28,19 @@ class FourVector {
 	FourVector& operator+=(const FourVector& rhs);
 	FourVector& operator-=(const FourVector& rhs);
 	FourVector& operator=(const FourVector& rhs);
+	friend std::istream& operator>>(std::istream& stream, FourVector& f);
 
 
  private:
 	//Member variables
-	double x;
-	double y;
-	double z;
-	double t;
-	double interval;
+	double x_;
+	double y_;
+	double z_;
+	double t_;
+	double interval_;
 	
 	//Private member functions
-	double spacetimeint() const;
+	void compute_interval();
 
 
 };
@@ -46,7 +49,6 @@ class FourVector {
 FourVector operator+(const FourVector& lhs, const FourVector& rhs);
 FourVector operator-(const FourVector& lhs, const FourVector& rhs);
 std::ostream& operator<<(std::ostream& stream, const FourVector& f);
-std::istream& operator>>(std::istream& stream, FourVector& f);
 
 /*
 	enum FourVectorCausalType {

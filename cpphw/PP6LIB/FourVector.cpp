@@ -1,84 +1,98 @@
 // FourVector.cpp
 #include "FourVector.hpp"
+#include "ThreeVector.hpp"
 #include <iostream>
 #include <cmath>
 
+
+
+
 //Assignment constructor
-FourVector::FourVector(const double t_, const double x_, const double y_, const double z_) : t(t_), x(x_), y(y_), z(z_)
+FourVector::FourVector(const double t, const double x, const double y, const double z) : t_(t), x_(x), y_(y), z_(z)
 {
-	interval = spacetimeint();	
+	compute_interval();	
 }
 //Copy constructor
-FourVector::FourVector(const FourVector& other) : t(other.t), x(other.x), y(other.y), z(other.z)
+FourVector::FourVector(const FourVector& other) : t_(other.t_), x_(other.x_), y_(other.y_), z_(other.z_)
 {
-	interval = spacetimeint();
+	compute_interval();
 }
 
+FourVector::FourVector(const double t, const ThreeVector s){
+	t_ = t;
+	x_ = s.ThreeVector::getX();
+	y_ = s.ThreeVector::getY();
+	z_ = s.ThreeVector::getZ();
+	compute_interval();
+}
+	
+
 //Get and set functions
-void FourVector::setX(const double x_){
-	x = x_;
+void FourVector::setX(const double x){
+	x_ = x;
 }
-void FourVector::setY(const double y_){
-	y = y_;
+void FourVector::setY(const double y){
+	y_ = y;
 }
-void FourVector::setZ(const double z_){
-	z = z_;
+void FourVector::setZ(const double z){
+	z_ = z;
 }
-void FourVector::setT(const double t_){
-	t = t_;
+void FourVector::setT(const double t){
+	t_ = t;
 }
+
 double FourVector::getX() const {
-	return x;
+	return x_;
 }
 double FourVector::getY() const {
-	return y;
+	return y_;
 }
 double FourVector::getZ() const {
-	return z;
+	return z_;
 }
 double FourVector::getT() const {
-	return t;
+	return t_;
 }
 double FourVector::getInterval() const {
-	return interval;
+	return interval_;
 }
 
 
 void FourVector::boost_z(const double v){ //Boost along z-axis
 	double gammainv = sqrt(1-(v*v));
 	double gamma = 1.0/gammainv; //Lorentz factor
-	x = x; //boosted x
-	y = y; //boosted y
-	z = gamma*((z) - (v*(t))); //boosted z
-	t = gamma*((t) - (v*(z))); //boosted t
+	x_ = x_; //boosted x
+	y_ = y_; //boosted y
+	z_ = gamma*((z_) - (v*(t_))); //boosted z
+	t_ = gamma*((t_) - (v*(z_))); //boosted t
 }
 
-double FourVector::spacetimeint() const { //Spacetime interval
-	return sqrt( std::abs( ((t)*(t)) - ((x)*(x)) - ((y)*(y)) - ((z)*(z)) ) );
+void FourVector::compute_interval() { //Spacetime interval
+	interval_ = sqrt( std::abs( ((t_)*(t_)) - ((x_)*(x_)) - ((y_)*(y_)) - ((z_)*(z_)) ) );
 }
 
 
 //Member assignment operator functions
 FourVector& FourVector::operator+=(const FourVector& rhs){
-	t += rhs.t;
-	x += rhs.x;
-	y += rhs.y;
-	z += rhs.z;
+	t_ += rhs.t_;
+	x_ += rhs.x_;
+	y_ += rhs.y_;
+	z_ += rhs.z_;
 	return *this;
 }
 FourVector& FourVector::operator-=(const FourVector& rhs){
-	t -= rhs.t;
-	x -= rhs.x;
-	y -= rhs.y;
-	z -= rhs.z;
+	t_ -= rhs.t_;
+	x_ -= rhs.x_;
+	y_ -= rhs.y_;
+	z_ -= rhs.z_;
 	return *this;
 }
 FourVector& FourVector::operator=(const FourVector& rhs){
 	if(&rhs != this){
-		t = rhs.t;
-		x = rhs.x;
-		y = rhs.y;
-		z = rhs.z;
+		t_ = rhs.t_;
+		x_ = rhs.x_;
+		y_ = rhs.y_;
+		z_ = rhs.z_;
 	}
 	return *this;
 }
@@ -107,6 +121,7 @@ std::istream& operator>>(std::istream& stream, FourVector& f){
 	f.setX(x);
 	f.setY(y);
 	f.setZ(z);
+	f.compute_interval();
 	return stream;
 }
 
