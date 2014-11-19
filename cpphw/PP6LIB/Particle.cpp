@@ -47,6 +47,14 @@ int Particle::getPDGCode() const {
 ThreeVector Particle::getThreeMomentum() const {
 	return momentum_;
 }
+FourVector Particle::getFourMomentum() const {
+	FourVector *f;
+	double magp = momentum_.length();
+	double energy = sqrt(magp*magp + mass_*mass_);
+	f->setThreeVector(momentum_);
+	f->setT(energy);
+	return *f;
+}
 
 //Member assignment operator functions
 Particle& Particle::operator=(const Particle& rhs){

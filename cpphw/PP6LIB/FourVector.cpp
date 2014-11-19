@@ -23,6 +23,7 @@ FourVector::FourVector(const double t, const ThreeVector s){
 	x_ = s.ThreeVector::getX();
 	y_ = s.ThreeVector::getY();
 	z_ = s.ThreeVector::getZ();
+	s_ = s;
 	compute_interval();
 }
 	
@@ -40,6 +41,9 @@ void FourVector::setZ(const double z){
 void FourVector::setT(const double t){
 	t_ = t;
 }
+void FourVector::setThreeVector(const ThreeVector& s){
+	s_ = s;
+}
 
 double FourVector::getX() const {
 	return x_;
@@ -55,6 +59,10 @@ double FourVector::getT() const {
 }
 double FourVector::getInterval() const {
 	return interval_;
+}
+ThreeVector FourVector::getThreeVector() {
+	s_ = ThreeVector(x_,y_,z_);
+	return s_;
 }
 
 

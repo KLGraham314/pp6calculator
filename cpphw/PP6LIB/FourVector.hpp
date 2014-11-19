@@ -18,11 +18,13 @@ class FourVector {
 	void setY(const double y);
 	void setZ(const double z);
 	void setT(const double t);
+	void setThreeVector(const ThreeVector& s);
 	double getX() const;
 	double getY() const;
 	double getZ() const;
 	double getT() const;
 	double getInterval() const;
+	ThreeVector getThreeVector();
 
 	//Member assignment operator functions
 	FourVector& operator+=(const FourVector& rhs);
@@ -38,6 +40,7 @@ class FourVector {
 	double z_;
 	double t_;
 	double interval_;
+	ThreeVector s_;
 	
 	//Private member functions
 	void compute_interval();

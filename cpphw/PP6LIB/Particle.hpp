@@ -20,6 +20,9 @@ class Particle {
 	double getMass() const;
 	int getPDGCode() const;
 	ThreeVector getThreeMomentum() const;
+	FourVector getFourMomentum() const;
+	double getEnergy() const;
+	double getMagMomentum() const;
 
 	//Member assignment operator functions
 	Particle& operator=(const Particle& rhs);
