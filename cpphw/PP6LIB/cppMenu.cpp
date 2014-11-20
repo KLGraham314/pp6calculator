@@ -7,6 +7,8 @@
 #include "cppPhysics.hpp"
 #include "FileReader.hpp"
 #include "FourVector.hpp"
+#include "ThreeVector.hpp"
+#include "Particle.hpp"
 
 
 
@@ -161,23 +163,28 @@ void menu(int top){ //Function for menu for Day 1 operations
 			      int *findex = new int[10000]; //Array to hold mu- events
 			      int *gindex = new int[10000]; //Array to hold mu+ events
 			      while (f.nextLine()) {
-					std::string namef = f.getFieldAsString(2);
-					int eventf = f.getFieldAsInt(1);
-					double pxf = f.getFieldAsDouble(3);
-					double pyf = f.getFieldAsDouble(4);
-					double pzf = f.getFieldAsDouble(5);
-					double Ef = sqrt((mass*mass)+(pxf*pxf)+(pyf*pyf)+(pzf*pzf));
-					if(namef=="mu+"){
-						FileReader g("observedparticles.dat");
+					std::string namef = f.getFieldAsString(2); //Name of particle
+					if(namef=="mu+"){ 
+						int eventf = f.getFieldAsInt(1); //Event number for this mu+
+						Particle muplus = Particle(); //Create new particle with defaults
+						//Set momentum, mass and PDG code
+						muplus.setThreeMomentum(f.getFieldAsDouble(3), f.getFieldAsDouble(4),f.getFieldAsDouble(5));
+						muplus.setMass(105.66);
+						muplus.setPDGCode(13);
+						FourVector pplus = muplus.getFourMomentum(); //Get the 4-momentum of this mu+
+						FileReader g("observedparticles.dat"); //Open file a second time
 						while (g.nextLine()){
-							std::string nameg = g.getFieldAsString(2);
-							int eventg = g.getFieldAsInt(1);
+							std::string nameg = g.getFieldAsString(2); //Name of second particle
 							if(nameg=="mu-"){
-								double pxg = g.getFieldAsDouble(3);
-								double pyg = g.getFieldAsDouble(4);
-								double pzg = g.getFieldAsDouble(5);
-								double Eg = sqrt((mass*mass)+(pxg*pxg)+(pyg*pyg)+(pzg*pzg));
-								double invmass = sqrt((Ef+Eg)*(Ef+Eg)-(pxf+pxg)*(pxf+pxg)-(pyf+pyg)*(pyf+pyg)-(pzf+pzg)*(pzf+pzg));
+								int eventg = g.getFieldAsInt(1); //Event number for this mu-
+								Particle muminus = Particle(); // Create a new particle with defaults
+								//Set momentum, mass and PDGCode for this mu-
+								muminus.setThreeMomentum(g.getFieldAsDouble(3), g.getFieldAsDouble(4), g.getFieldAsDouble(5));
+								muminus.setMass(105.66);
+								muminus.setPDGCode(13);
+								FourVector pminus = muminus.getFourMomentum(); //Get 4-momentum for this mu-
+								FourVector added = pplus + pminus; //Add 4-momenta components
+								double invmass = added.getInterval(); //Calculate invariant mass 
 								invm[k]= invmass; //Add the inv mass to the array
 								findex[k]= eventf; //Line of the mu+
 								gindex[k]= eventg; //Line of the mu-
@@ -189,7 +196,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 					} 
 			      }
 			     bubblesort(invm, findex, gindex); //Sort by highest inv mass, and sort corresponding mu+, mu- indices into same order
-			     std::cout << "Inv mass \t mu+ event \t mu- event" << std::endl;
+			     std::cout << "Inv mass \t mu+ event \t mu- event" << std::endl; //Print
 			     for(int i=0; i<10; i++){
 					std::cout << invm[i] << '\t' << '\t' << findex[i] << '\t'<< '\t' << gindex[i] << std::endl;
 			     }
