@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <climits>
+#include <vector>
 #include "cppMenu.hpp"
 #include "cppMath.hpp"
 #include <cstdlib>
@@ -280,11 +281,22 @@ void menu(int top){ //Function for menu for Day 1 operations
 		}
 
 		if(op=='r'){ //Read in pdg.dat file
-			std::cout << "Particle \t Code \t \t Charge \t Mass /MeV \n"; //Column headers
+			std::cout << "Particle Type \t Code \t \t Charge \t Mass /MeV \n"; //Column headers
 			FileReader p("pdg.dat");
 			if (p.isValid()) {
-				while (p.nextLine()) { //For each line, print tab-separated data
-					std::cout << p.getField<std::string>(1) << "\t\t" << p.getField<int>(2) << "\t\t" << p.getField<double>(3) << "\t\t" << p.getField<double>(4) << std::endl;
+				std::vector<std::string> particletypes; //Vector to hold particle types
+				std::vector<int> pdgcodes; //Vector to hold PDG codes
+				std::vector<double> charges; //Vector to hold particle charges
+				std::vector<double> masses; //Vector to hold particle masses in MeV
+				while (p.nextLine()) { //For each line, append data to vectors
+					particletypes.push_back(p.getField<std::string>(1));
+					pdgcodes.push_back(p.getField<int>(2));
+					charges.push_back(p.getField<double>(3));
+					masses.push_back(p.getField<double>(4));
+				}
+				size_t nElements = particletypes.size();
+				for(int i = 0; i<nElements; i++){ //Print data to screen
+					std::cout << particletypes.at(i) << "\t\t" << pdgcodes.at(i) << "\t\t" << charges.at(i) << "\t\t" << masses.at(i) << std::endl;
 				}
 			} else { //File not opened
 				std::cout << "Failed to open file. Check pdg.dat has correct name and is in correct folder." << std::endl;
