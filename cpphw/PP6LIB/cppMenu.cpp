@@ -158,14 +158,14 @@ void menu(int top){ //Function for menu for Day 1 operations
 			if (f.isValid()) {
 			      // Loop until out of lines
 			      int k = 0; //Array index
-			      double *invm = new double[10000]; //Array to hold invariant masses
-			      for(int i=0; i<10000; i++) invm[i]=0; //initialise
-			      int *findex = new int[10000]; //Array to hold mu- events
-			      int *gindex = new int[10000]; //Array to hold mu+ events
-			      while (f.nextLine()) {
+			      double *invm = new double[100000]; //Array to hold invariant masses
+			      for(int i=0; i<100000; i++) invm[i]=0; //initialise
+			      int *findex = new int[100000]; //Array to hold mu- events
+			      int *gindex = new int[100000]; //Array to hold mu+ events
+			      while (f.nextLine()) {										      
 					std::string namef = f.getFieldAsString(2); //Name of particle
 					if(namef=="mu+"){ 
-						int eventf = f.getFieldAsInt(1); //Event number for this mu+
+						int eventf = f.getFieldAsInt(1); //Event number for this mu+					
 						Particle muplus = Particle(); //Create new particle with defaults
 						//Set momentum, mass and PDG code
 						muplus.setThreeMomentum(f.getFieldAsDouble(3), f.getFieldAsDouble(4),f.getFieldAsDouble(5));
@@ -189,8 +189,6 @@ void menu(int top){ //Function for menu for Day 1 operations
 								findex[k]= eventf; //Line of the mu+
 								gindex[k]= eventg; //Line of the mu-
 								k++; //Move to nexy array index
-
-
 							}
 						}
 					} 

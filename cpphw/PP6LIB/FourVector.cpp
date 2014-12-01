@@ -109,6 +109,7 @@ FourVector& FourVector::operator=(const FourVector& rhs){
 FourVector operator+(const FourVector& lhs, const FourVector& rhs){
 	FourVector temp(lhs);
 	temp += rhs;
+	temp.compute_interval();
 	return temp;
 }
 FourVector operator-(const FourVector& lhs, const FourVector& rhs){

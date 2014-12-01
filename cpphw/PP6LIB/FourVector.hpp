@@ -31,6 +31,7 @@ class FourVector {
 	FourVector& operator-=(const FourVector& rhs);
 	FourVector& operator=(const FourVector& rhs);
 	friend std::istream& operator>>(std::istream& stream, FourVector& f);
+	friend FourVector operator+(const FourVector& lhs, const FourVector& rhs);
 
 
  private:
@@ -49,7 +50,6 @@ class FourVector {
 };
 
 //Free functions for operators
-FourVector operator+(const FourVector& lhs, const FourVector& rhs);
 FourVector operator-(const FourVector& lhs, const FourVector& rhs);
 std::ostream& operator<<(std::ostream& stream, const FourVector& f);
 

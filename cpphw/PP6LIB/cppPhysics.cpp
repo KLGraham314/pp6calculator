@@ -34,10 +34,10 @@ void swapint(int& a, int& b){ //Swap ints a and b
 	b = temp;
 }
 
-void bubblesort(double array[10000], int farray[10000], int garray[10000]){
+void bubblesort(double array[100000], int farray[100000], int garray[100000]){
 	int conditional = 1; //Assume disordered to start	
 	while(conditional!=0){
-	      for(int i=0; i<10000; i++){
+	      for(int i=0; i<100000; i++){
 		  if(array[i]<array[i+1]){
 			 swap(array[i],array[i+1]);
 			 swapint(farray[i],farray[i+1]);
@@ -45,7 +45,7 @@ void bubblesort(double array[10000], int farray[10000], int garray[10000]){
 		  }
 	      }
 		 conditional = 0; // If ordered, = 0;
-		for(int i=0; i<10000; i++){
+		for(int i=0; i<100000; i++){
 			if(array[i]<array[i+1]) conditional++; //Increment conditional if disordered
 		}
 	}

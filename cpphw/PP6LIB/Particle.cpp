@@ -48,12 +48,12 @@ ThreeVector Particle::getThreeMomentum() const {
 	return momentum_;
 }
 FourVector Particle::getFourMomentum() const {
-	FourVector *f;
+	FourVector f;
 	double magp = momentum_.length();
 	double energy = sqrt(magp*magp + mass_*mass_);
-	f->setThreeVector(momentum_);
-	f->setT(energy);
-	return *f;
+	f.setThreeVector(momentum_);
+	f.setT(energy);
+	return f;
 }
 
 //Member assignment operator functions
