@@ -163,23 +163,23 @@ void menu(int top){ //Function for menu for Day 1 operations
 			      int *findex = new int[100000]; //Array to hold mu- events
 			      int *gindex = new int[100000]; //Array to hold mu+ events
 			      while (f.nextLine()) {										      
-					std::string namef = f.getFieldAsString(2); //Name of particle
+					std::string namef = f.getField<std::string>(2); //Name of particle
 					if(namef=="mu+"){ 
-						int eventf = f.getFieldAsInt(1); //Event number for this mu+					
+						int eventf = f.getField<int>(1); //Event number for this mu+					
 						Particle muplus = Particle(); //Create new particle with defaults
 						//Set momentum, mass and PDG code
-						muplus.setThreeMomentum(f.getFieldAsDouble(3), f.getFieldAsDouble(4),f.getFieldAsDouble(5));
+						muplus.setThreeMomentum(f.getField<double>(3), f.getField<double>(4),f.getField<double>(5));
 						muplus.setMass(105.66);
 						muplus.setPDGCode(13);
 						FourVector pplus = muplus.getFourMomentum(); //Get the 4-momentum of this mu+
 						FileReader g("observedparticles.dat"); //Open file a second time
 						while (g.nextLine()){
-							std::string nameg = g.getFieldAsString(2); //Name of second particle
+							std::string nameg = g.getField<std::string>(2); //Name of second particle
 							if(nameg=="mu-"){
-								int eventg = g.getFieldAsInt(1); //Event number for this mu-
+								int eventg = g.getField<int>(1); //Event number for this mu-
 								Particle muminus = Particle(); // Create a new particle with defaults
 								//Set momentum, mass and PDGCode for this mu-
-								muminus.setThreeMomentum(g.getFieldAsDouble(3), g.getFieldAsDouble(4), g.getFieldAsDouble(5));
+								muminus.setThreeMomentum(g.getField<double>(3), g.getField<double>(4), g.getField<double>(5));
 								muminus.setMass(105.66);
 								muminus.setPDGCode(13);
 								FourVector pminus = muminus.getFourMomentum(); //Get 4-momentum for this mu-
@@ -266,6 +266,40 @@ void menu(int top){ //Function for menu for Day 1 operations
 	}
 
     } //End Day 3
+
+    if(top==4){ //Day 4 operations
+	while(true) {
+		std::cout << "What kind of operation do you want to perform? Enter 'r' to read in the pdg.dat file you have supplied, or 'q' to quit to the top level menu." << std::endl;
+		std::cin >> op; //Take in user input for operation
+		
+		if(!std::cin){ //If input failed, move onto the next iteration
+			std::cout << "Input failed" << std::endl;
+			std::cin.clear();
+			std::cin.ignore(INT_MAX, '\n');
+			continue;
+		}
+
+		if(op=='r'){ //Read in pdg.dat file
+			std::cout << "Particle \t Code \t \t Charge \t Mass /MeV \n"; //Column headers
+			FileReader p("pdg.dat");
+			if (p.isValid()) {
+				while (p.nextLine()) { //For each line, print tab-separated data
+					std::cout << p.getField<std::string>(1) << "\t\t" << p.getField<int>(2) << "\t\t" << p.getField<double>(3) << "\t\t" << p.getField<double>(4) << std::endl;
+				}
+			} else { //File not opened
+				std::cout << "Failed to open file. Check pdg.dat has correct name and is in correct folder." << std::endl;
+				continue;
+			}
+
+		} else if(op=='q'){ //Go back to top level menu
+			break;
+
+		} else { //Invalid input
+			std::cout << "Input must be 'r' or 'q' only." << std::endl;
+			continue;
+		}
+    	}
+    } //End Day 4	
 
 } //End menu()
 

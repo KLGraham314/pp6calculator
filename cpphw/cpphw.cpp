@@ -23,8 +23,8 @@ int main()
 	} else if(top==0) { //Quit the program
 		std::cout << "Thank you for using PP6 calculator. Goodbye!" << std::endl;
 		break;
-	} else if(top!=1 && top!=2 && top!=3){ //If input not valid, print message and move onto next iteration
-		std::cout << "Please enter '0', '1', '2' or '3' only." << std::endl;
+	} else if(top!=1 && top!=2 && top!=3 && top!=4){ //If input not valid, print message and move onto next iteration
+		std::cout << "Please enter '0', '1', '2' , '3' or '4' only." << std::endl;
 	} else {
 		 menu(top); //Takes user to menu of choice;
 	}
