@@ -2,6 +2,9 @@
 #include <cmath>
 #include <climits>
 #include <vector>
+#include <algorithm>
+#include <iterator>
+#include <time.h>
 #include "cppMenu.hpp"
 #include "cppMath.hpp"
 #include <cstdlib>
@@ -11,6 +14,25 @@
 #include "ThreeVector.hpp"
 #include "Particle.hpp"
 
+int myRand(){ //Function which uses rand to generate a random number between 0 and 100
+	return rand() % 101;
+}
+
+void randomVector(){ //Function to create vector with 10 random integers 0 to 100, print them, 
+		     // print their maximum and minimum values, then print the sorted values
+	srand( time(NULL)); //Seed rand with computer time
+	std::vector<int> V(10); //Create a vector V with 10 integer elements
+	generate(V.begin(), V.end(), myRand); //Fill with 10 random integers between 0 and 100
+	std::cout << std::endl << "10 random integers between 0 and 100:  ";
+	std::copy(V.begin(), V.end(), std::ostream_iterator<int>(std::cout, "  ")); //Print all elements to screen
+	std::vector<int>::const_iterator min = min_element(V.begin(), V.end()); //Assign iterator min to minimum element
+	std::vector<int>::const_iterator max = max_element(V.begin(), V.end()); //Assign iteratir max to maximum element
+	std::cout << std::endl << "Minimum value: " << *min << std::endl; //Print minimum value
+	std::cout << "Maximum value: " << *max << std::endl; //Print maximum value
+	sort(V.begin(), V.end()); //Sort all elements into ascending order
+	std::cout << "Sorted into ascended order:  ";
+	std::copy(V.begin(), V.end(), std::ostream_iterator<int>(std::cout, "  ")); //Print sorted elements to screen
+}
 
 
 void menu(int top){ //Function for menu for Day 1 operations
@@ -21,7 +43,7 @@ void menu(int top){ //Function for menu for Day 1 operations
      if(top==1){ //Day 1 
 
 	while(true){ //While true, the calculator will keep performing functions until user quits
-		std::cout << "What kind of operation do you want to perform? (type 'm' for multiplication, 'd' for division, 'a' for addition or 's' for subtraction, 'x' to calculate the x-intercept of a line, 'e' to solve a quadratic equation, 't' to calculate the length of a 3-vector, 'f' to calculate the length of a 4-vector, 'p' to calculate the invariant mass of two particles, or 'q' to quit and go back to the top level menu, followed by the enter key)" << std::endl; //Ask the user to choose operation
+		std::cout << std::endl << "What kind of operation do you want to perform? (type 'm' for multiplication, 'd' for division, 'a' for addition or 's' for subtraction, 'x' to calculate the x-intercept of a line, 'e' to solve a quadratic equation, 't' to calculate the length of a 3-vector, 'f' to calculate the length of a 4-vector, 'p' to calculate the invariant mass of two particles, or 'q' to quit and go back to the top level menu, followed by the enter key)" << std::endl; //Ask the user to choose operation
 		std::cin >> op; //Take in user selection
 
 		if(!std::cin){ //If input failed, move onto the next iteration
@@ -134,7 +156,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 
 	while(true){ //Loop until user quits
 
-		std::cout << "What kind of operation do you want to perform? Enter 'r' to generate 100 random energies and 3-momenta and report the mean energy and standard deviation, 'm' to read in a file you have supplied to calculate the invariant mass of all mu+ mu- pairs and report the 10 largest invariant masses and which events formed these, or 'q' to quit and go back to the top level menu." << std::endl;
+		std::cout << std::endl << "What kind of operation do you want to perform? Enter 'r' to generate 100 random energies and 3-momenta and report the mean energy and standard deviation, 'm' to read in a file you have supplied to calculate the invariant mass of all mu+ mu- pairs and report the 10 largest invariant masses and which events formed these, or 'q' to quit and go back to the top level menu." << std::endl;
 		std::cin >> op; //Take user input
 
 		if(!std::cin){ //If input failed, move onto the next iteration
@@ -220,7 +242,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 
     if(top==3){ //Day 3 operations
 	while(true){
-		std::cout << "What kind of operation do you want to perform? Enter 'b' to boost a 4-vector along the x-axis, 'l' to calulate the length of a 4-vector or 'q' to quit to top level menu." << std::endl;
+		std::cout << std::endl << "What kind of operation do you want to perform? Enter 'b' to boost a 4-vector along the x-axis, 'l' to calulate the length of a 4-vector or 'q' to quit to top level menu." << std::endl;
 		std::cin >> op; //Take in user input for operation
 
 		if(!std::cin){ //If input failed, move onto the next iteration
@@ -270,7 +292,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 
     if(top==4){ //Day 4 operations
 	while(true) {
-		std::cout << "What kind of operation do you want to perform? Enter 'r' to read in the pdg.dat file you have supplied, or 'q' to quit to the top level menu." << std::endl;
+		std::cout << std::endl << "What kind of operation do you want to perform? Enter 'r' to read in the pdg.dat file you have supplied, 'v' to create 10 random intergers between 0 and 100, output them and their maximum and minimum, sort them and display them again, or 'q' to quit to the top level menu." << std::endl;
 		std::cin >> op; //Take in user input for operation
 		
 		if(!std::cin){ //If input failed, move onto the next iteration
@@ -306,16 +328,21 @@ void menu(int top){ //Function for menu for Day 1 operations
 					iterCharges++;
 					iterMasses++;
 				}
+				std::cout << std::endl;
 			} else { //File not opened
 				std::cout << "Failed to open file. Check pdg.dat has correct name and is in correct folder." << std::endl;
 				continue;
 			}
 
+		} else if(op=='v'){ //Vector sorting algorithm
+			randomVector(); //Create and print vector with 10 random numbers 0-100, print min and max, and sort and print
+			std::cout << std::endl << std::endl;			
+
 		} else if(op=='q'){ //Go back to top level menu
 			break;
 
 		} else { //Invalid input
-			std::cout << "Input must be 'r' or 'q' only." << std::endl;
+			std::cout << "Input must be 'r', 'v' or 'q' only." << std::endl;
 			continue;
 		}
     	}

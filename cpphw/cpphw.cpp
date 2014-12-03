@@ -13,7 +13,7 @@ int main()
     while(true){
 	int top = 0; // Variable for users to decide on which menu for day of the course
 	std::cout << "Please choose which functions you would like to choose from based on the day of the course they were implemented." << std::endl;
-	std::cout << "Enter '1' for Day 1, '2' for Day 2 and '3' for Day 3, or '0' to quit PP6 calculator." << std::endl;
+	std::cout << "Enter '1' for Day 1, '2' for Day 2, '3' for Day 3, '4' for Day 4, or '0' to quit PP6 calculator." << std::endl;
 	std::cin >> top; //Take user choice of menu
 	if(!std::cin){ //If input failed, move onto the next iteration
 		std::cout << "Input failed" << std::endl;
