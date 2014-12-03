@@ -18,7 +18,7 @@ class ParticleInfo {
 	int getCharge(int PDGCode);
 	std::string getName(int PDGCode);
 	double getMassMeV(int PDGCode);
-	double getMassGev(int PDGCode);
+	double getMassGeV(int PDGCode);
 
   private:
 	//Copy constructor
