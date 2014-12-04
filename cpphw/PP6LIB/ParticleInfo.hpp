@@ -12,6 +12,7 @@ class ParticleInfo {
   public:
 	//Constructors
 	ParticleInfo(std::string& database);
+	ParticleInfo(const char* filename);
 	
 	//Get functions
 	int getPDGCode(std::string& name);

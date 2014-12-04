@@ -19,6 +19,19 @@ ParticleInfo::ParticleInfo(std::string& database){
 	}
 }
 
+ParticleInfo::ParticleInfo(const char* database){
+	FileReader p(database);
+	if(p.isValid()){
+		while(p.nextLine()) {
+			particle_Ids_.insert(std::make_pair(p.getField<std::string>(1), p.getField<int>(2)));
+			particle_Names_.insert(std::make_pair(p.getField<int>(2), p.getField<std::string>(1)));
+			particle_Charges_.insert(std::make_pair(p.getField<int>(2), p.getField<int>(3)));
+			particle_Masses_.insert(std::make_pair(p.getField<int>(2), p.getField<double>(4)));
+		}
+	}
+}
+
+
 //Get functions
 int ParticleInfo::getPDGCode(std::string& name){
 	PartIdCont::iterator p = particle_Ids_.find(name);
@@ -46,7 +59,7 @@ double ParticleInfo::getMassMeV(int PDGCode){
 }
 double ParticleInfo::getMassGeV(int PDGCode){
 	double m = getMassMeV(PDGCode); 
-	return 1000*m;
+	return 0.001*m;
 }
 
 //Copy constructor

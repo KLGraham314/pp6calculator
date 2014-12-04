@@ -13,6 +13,7 @@
 #include "FourVector.hpp"
 #include "ThreeVector.hpp"
 #include "Particle.hpp"
+#include "ParticleInfo.hpp"
 
 int myRand(){ //Function which uses rand to generate a random number between 0 and 100
 	return rand() % 101;
@@ -203,7 +204,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 								Particle muminus = Particle(); // Create a new particle with defaults
 								//Set momentum, mass and PDGCode for this mu-
 								muminus.setThreeMomentum(g.getField<double>(3), g.getField<double>(4), g.getField<double>(5));
-								muminus.setMass(105.66);
+								muminus.setMass(mass);
 								muminus.setPDGCode(13);
 								FourVector pminus = muminus.getFourMomentum(); //Get 4-momentum for this mu-
 								FourVector added = pplus + pminus; //Add 4-momenta components
@@ -217,7 +218,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 					} 
 			      }
 			     bubblesort(invm, findex, gindex); //Sort by highest inv mass, and sort corresponding mu+, mu- indices into same order
-			     std::cout << "Inv mass \t mu+ event \t mu- event" << std::endl; //Print
+			     std::cout << "Inv m /GeV \t mu+ event \t mu- event" << std::endl; //Print
 			     for(int i=0; i<10; i++){
 					std::cout << invm[i] << '\t' << '\t' << findex[i] << '\t'<< '\t' << gindex[i] << std::endl;
 			     }
@@ -292,7 +293,7 @@ void menu(int top){ //Function for menu for Day 1 operations
 
     if(top==4){ //Day 4 operations
 	while(true) {
-		std::cout << std::endl << "What kind of operation do you want to perform? Enter 'r' to read in the pdg.dat file you have supplied, 'v' to create 10 random intergers between 0 and 100, output them and their maximum and minimum, sort them and display them again, or 'q' to quit to the top level menu." << std::endl;
+		std::cout << std::endl << "What kind of operation do you want to perform? Enter 'r' to read in the pdg.dat file you have supplied, 'v' to create 10 random intergers between 0 and 100, output them and their maximum and minimum, sort them and display them again, 'm' to produce an ordered list of invariant masses produced by mu+ mu- pairs in observed_particles.dat, or 'q' to quit to the top level menu." << std::endl;
 		std::cin >> op; //Take in user input for operation
 		
 		if(!std::cin){ //If input failed, move onto the next iteration
@@ -336,13 +337,67 @@ void menu(int top){ //Function for menu for Day 1 operations
 
 		} else if(op=='v'){ //Vector sorting algorithm
 			randomVector(); //Create and print vector with 10 random numbers 0-100, print min and max, and sort and print
-			std::cout << std::endl << std::endl;			
+			std::cout << std::endl << std::endl;	
+
+		} else if(op=='m'){ //List of mu+mu- pairs in observed_particles.dat sorted by invariant mass
+			FileReader f("observedparticles.dat"); //Open the file to be read
+			// Only process if the file is open/valid
+			if (f.isValid()) {
+			      ParticleInfo p("pdg.dat"); //Populate ParticleInfo database
+			      // Loop until out of lines
+			      std::map<double,int> finvm;
+			      std::map<double,int> ginvm;
+			      while (f.nextLine()) {										      
+					std::string namef = f.getField<std::string>(2); //Name of particle
+					if(namef=="mu+"){ 
+						int eventf = f.getField<int>(1); //Event number for this mu+				
+						Particle muplus = Particle(); //Create new particle with defaults
+						//Set momentum, mass and PDG code
+						muplus.setThreeMomentum(f.getField<double>(3), f.getField<double>(4),f.getField<double>(5));
+						int code = p.getPDGCode(namef);
+						muplus.setPDGCode(code);
+						muplus.setMass(p.getMassGeV(code));
+						FourVector pplus = muplus.getFourMomentum(); //Get the 4-momentum of this mu+
+						FileReader g("observedparticles.dat"); //Open file a second time
+						while (g.nextLine()){
+							std::string nameg = g.getField<std::string>(2); //Name of second particle
+							if(nameg=="mu-"){
+								int eventg = g.getField<int>(1); //Event number for this mu-
+								Particle muminus = Particle(); // Create a new particle with defaults
+								//Set momentum, mass and PDGCode for this mu-
+								muminus.setThreeMomentum(g.getField<double>(3), g.getField<double>(4), g.getField<double>(5));
+								code = p.getPDGCode(nameg); //Get PDG code for mu- from database
+								muminus.setPDGCode(code); //Set PDG code in Particle
+								muminus.setMass(p.getMassGeV(code)); //Get mass from database and set in Particle
+								FourVector pminus = muminus.getFourMomentum(); //Get 4-momentum for this mu-
+								FourVector added = pplus + pminus; //Add 4-momenta components
+								double invmass = added.getInterval(); //Calculate invariant mass 
+								finvm.insert(std::make_pair(invmass,eventf)); 
+								ginvm.insert(std::make_pair(invmass,eventg));
+							}
+						}
+					} 
+			      }
+			    std::cout << "Inv m /GeV \t mu+ event \t mu- event" << std::endl; //Print headers
+			     std::map<double,int>::iterator fiter = finvm.begin(); //Use iterators to print inv m and associated mu+ and 
+			     std::map<double,int>::iterator giter = ginvm.begin(); // mu- events. Maps are already ordered by key.
+			     std::map<double,int>::iterator finvmEnd = finvm.end();
+			     for( ; fiter!=finvm.end();fiter++){
+					std::cout << (*fiter).first << '\t' << '\t' << (*fiter).second << '\t'<< '\t' << (*giter).second << std::endl;
+					giter++;
+			     }
+			} else { // File is not open/valid
+			      std::cout << "Failed to open file. Check file is named 'observedparticles.dat', is in the same directory as this, and is of a valid format" << std::endl;
+			      continue; 
+			}
+
+	
 
 		} else if(op=='q'){ //Go back to top level menu
 			break;
 
 		} else { //Invalid input
-			std::cout << "Input must be 'r', 'v' or 'q' only." << std::endl;
+			std::cout << "Input must be 'r', 'v', 'm' or 'q' only." << std::endl;
 			continue;
 		}
     	}
